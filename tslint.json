@@ -1,0 +1,42 @@
+{
+  "defaultSeverity": "error",
+  "rules": {
+    "class-name": true,
+    "curly": [true, "ignore-same-line"],
+    "comment-format": [true, "check-space"],
+    "encoding": true,
+    "jsdoc-format": true,
+    "no-boolean-literal-compare": true,
+    "no-console": false,
+    "no-construct": true,
+    "no-empty": [true, "allow-empty-functions"],
+    "no-eval": true,
+    "no-internal-module": true,
+    "no-object-literal-type-assertion": false,
+    "no-parameter-reassignment": true,
+    "no-submodule-imports": false,
+    "no-this-assignment": [true, { "allowed-names": ["^self$"], "allow-destructuring": true }],
+    "no-var-keyword": true,
+    "object-literal-sort-keys": false,
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": true
+      }
+    ],
+    "prefer-const": true,
+    "prefer-template": true,
+    "triple-equals": [true, "allow-null-check"],
+    "variable-name": [
+      true,
+      "allow-leading-underscore",
+      "allow-pascal-case",
+      "ban-keywords",
+      "check-format"
+    ],
+    "no-implicit-dependencies": [true, "dev"],
+    "array-type": false,
+    "max-classes-per-file": [true, 10]
+  },
+  "extends": ["tslint:latest", "tslint-config-prettier"]
+}
