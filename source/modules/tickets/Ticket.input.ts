@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb"
 import { Field, Float, InputType, Int } from "type-graphql"
 
-import { Ticket } from "../../entities/Ticket"
+import { Ticket } from "../../entities/ticket"
 
 @InputType()
 export class TicketInput {

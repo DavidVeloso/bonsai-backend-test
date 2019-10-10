@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo
+    container_name: bonsai_mongodb
+    restart: unless-stopped
+    volumes: 
+      - mongodata:/data/db
+    networks:
+      - bonsai_network 
+    ports:
+      - 27017:27017
+  api: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bonsai_api
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - '${SERVER_PORT}:4000'
+    networks:
+      - bonsai_network
+    volumes:
+      - .:/home/bonsai_backend
+      - node_modules:/home/bonsai_backend/node_modules
+
+networks:
+  bonsai_network:
+    driver: bridge
+
+volumes:
+  mongodata:
+  node_modules:  
