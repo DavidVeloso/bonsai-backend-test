@@ -61,11 +61,11 @@ const imdbMovieInfo = async (movieName:string) => {
   }
 }
 
-const cleanMovieName = (movieName:string) => {
+const cleanMovieName = (movieName:string): string => {
   const lowerCaseAndTrim = movieName.toLowerCase().trim()
   const removeBrackets = lowerCaseAndTrim.replace(/\(.*\)/, '')
   const noTheExpression = removeBrackets.replace(', the', '')
-  const noAExpression = removeBrackets.replace(', a', '')
+  const noAExpression = noTheExpression.replace(', a', '')
   const encodedName = encodeURIComponent(noAExpression)
   return encodedName
 }
