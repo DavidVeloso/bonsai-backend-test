@@ -1,5 +1,6 @@
-import { ObjectId } from "mongodb"
+import { ObjectId, ObjectID } from "mongodb"
 import { Field, Float, InputType, Int } from "type-graphql"
+import { Max } from "class-validator"
 
 import { Ticket } from "../../entities/ticket"
 
@@ -19,6 +20,16 @@ export class ListTicketsInput {
 }
 
 @InputType()
+export class SyncTicketsInput {
+  @Field(() => Int, { defaultValue: 100 })
+  @Max(1000)
+  public maxTicketsToSync: number
+
+  @Field(() => Int, { defaultValue: 50 })
+  public limitItensPage: number
+}
+
+@InputType()
 export class AddTicketInput implements Partial<Ticket> {
   @Field()
   public title: string
@@ -33,8 +44,14 @@ export class AddTicketInput implements Partial<Ticket> {
   public inventory: number
 
   @Field()
-  public imageUrl: string
+  public imageUrl?: string
 
   @Field()
   public date: Date
+
+  @Field()
+  public originId: ObjectId
+
+  @Field()
+  public movie?: ObjectId
 }

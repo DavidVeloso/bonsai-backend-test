@@ -1,8 +1,14 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql"
 
 import TicketModel, { Ticket } from "../../entities/ticket"
+import syncTicketsService from '../../services/syncTickets'
 
-import { AddTicketInput, ListTicketsInput, TicketInput } from "./Ticket.input"
+import { 
+  AddTicketInput, 
+  ListTicketsInput, 
+  TicketInput,
+  SyncTicketsInput
+} from "./Ticket.input"
 
 @Resolver(() => Ticket)
 export class TicketResolver {
@@ -29,5 +35,11 @@ export class TicketResolver {
   public async addTicket(@Arg("input") ticketInput: AddTicketInput): Promise<Ticket> {
     const ticket = new TicketModel(ticketInput)
     return ticket.saveFields()
+  }
+  
+  @Mutation(() => String)
+  public async syncTickets(@Arg("input") syncInput: SyncTicketsInput): Promise<String> {
+    syncTicketsService(syncInput)
+    return 'Tickets sync started!'
   }
 }

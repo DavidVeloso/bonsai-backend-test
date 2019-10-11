@@ -37,12 +37,19 @@ export class Ticket extends Typegoose {
   public inventory: number
 
   @Field()
-  @Property({ required: true })
   public imageUrl: string
 
   @Field()
   @Property({ required: true })
   public date: Date
+  
+  @Field()
+  @Property({ ref: 'Movie' })
+  public movie: ObjectId
+
+  @Field()
+  @Property({ required: true })
+  public originId: ObjectId
 
   @InstanceMethod
   public saveFields(this: InstanceType<Ticket>) {

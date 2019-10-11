@@ -10,6 +10,8 @@ input AddTicketInput {
   inventory: Int!
   imageUrl: String!
   date: DateTime!
+  originId: ObjectId!
+  movie: ObjectId!
 }
 
 """
@@ -22,8 +24,33 @@ input ListTicketsInput {
   limit: Int!
 }
 
+type Movie {
+  _id: ObjectId!
+  Title: String!
+  Year: String!
+  Rated: String!
+  Released: String!
+  Runtime: String!
+  Genre: [String!]!
+  Director: String!
+  Writer: String!
+  Actors: [String!]!
+  Plot: String!
+  Language: [String!]!
+  Country: String!
+  Awards: String!
+  Poster: String!
+  Ratings: [Rating!]!
+  Metascore: String!
+  imdbRating: String!
+  imdbVotes: String!
+  imdbID: String!
+  Production: String!
+}
+
 type Mutation {
   addTicket(input: AddTicketInput!): Ticket!
+  syncTickets(input: SyncTicketsInput!): String!
 }
 
 """Mongo object id scalar type"""
@@ -34,6 +61,16 @@ type Query {
   listTickets(input: ListTicketsInput!): [Ticket!]!
 }
 
+type Rating {
+  Value: String!
+  Source: String!
+}
+
+input SyncTicketsInput {
+  maxTicketsToSync: Int = 100
+  limitItensPage: Int = 50
+}
+
 type Ticket {
   _id: ObjectId!
   title: String!
@@ -42,6 +79,8 @@ type Ticket {
   inventory: Int!
   imageUrl: String!
   date: DateTime!
+  movie: ObjectId!
+  originId: ObjectId!
 }
 
 input TicketInput {
