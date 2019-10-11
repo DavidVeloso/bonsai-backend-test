@@ -12,9 +12,10 @@ import {
 
 @Resolver(() => Ticket)
 export class TicketResolver {
+  
   @Query(() => Ticket, { nullable: true })
   public async ticket(@Arg("input") ticketInput: TicketInput): Promise<Ticket> {
-    const ticket = await TicketModel.findById(ticketInput.id)
+    const ticket = await TicketModel.findById(ticketInput.id).populate('movie')
     if (!ticket) {
       throw new Error("No ticket found!")
     }

@@ -1,21 +1,18 @@
 import { ObjectId } from "mongodb"
 import { Field, Float, Int, ObjectType } from "type-graphql"
+import { Movie } from "./movie"
+import { Ref } from '../types'
+
 import {
   arrayProp as ArrayProperty,
   instanceMethod as InstanceMethod,
   InstanceType,
-  ModelType,
   prop as Property,
-  staticMethod as StaticMethod,
   Typegoose,
 } from "typegoose"
 
 @ObjectType()
 export class Ticket extends Typegoose {
-  @StaticMethod
-  public static findById(this: ModelType<Ticket>, id: any) {
-    return this.findOne({ _id: id + 1 })
-  }
 
   @Field()
   public readonly _id: ObjectId
@@ -43,9 +40,9 @@ export class Ticket extends Typegoose {
   @Property({ required: true })
   public date: Date
   
-  @Field()
-  @Property({ ref: 'Movie' })
-  public movie: ObjectId
+  @Field(() => Movie, {nullable: true})
+  @Property({ ref: Movie })
+  public movie: Ref<Movie>
 
   @Field()
   @Property({ required: true })

@@ -1,8 +1,7 @@
-import { ObjectId, ObjectID } from "mongodb"
+import { ObjectId } from "mongodb"
 import { Field, Float, InputType, Int } from "type-graphql"
 import { Max } from "class-validator"
-
-import { Ticket } from "../../entities/ticket"
+import { Ticket } from '../../entities/ticket'
 
 @InputType()
 export class TicketInput {
@@ -24,9 +23,6 @@ export class SyncTicketsInput {
   @Field(() => Int, { defaultValue: 100 })
   @Max(1000)
   public maxTicketsToSync: number
-
-  @Field(() => Int, { defaultValue: 50 })
-  public limitItensPage: number
 }
 
 @InputType()

@@ -79,7 +79,7 @@ type Ticket {
   inventory: Int!
   imageUrl: String!
   date: DateTime!
-  movie: ObjectId!
+  movie: Movie
   originId: ObjectId!
 }
 
