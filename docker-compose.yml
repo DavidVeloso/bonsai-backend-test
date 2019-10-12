@@ -25,7 +25,6 @@ services:
       - bonsai_network
     volumes:
       - .:/home/bonsai_backend
-      - node_modules:/home/bonsai_backend/node_modules
 
 networks:
   bonsai_network:
@@ -33,4 +32,3 @@ networks:
 
 volumes:
   mongodata:
-  node_modules:  

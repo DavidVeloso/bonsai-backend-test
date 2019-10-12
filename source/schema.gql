@@ -59,6 +59,7 @@ scalar ObjectId
 type Query {
   ticket(input: TicketInput!): Ticket
   listTickets(input: ListTicketsInput!): [Ticket!]!
+  ticketsWithoutMatch(input: TicketWithoutMatch!): TicketPaginateResult!
 }
 
 type Rating {
@@ -68,7 +69,6 @@ type Rating {
 
 input SyncTicketsInput {
   maxTicketsToSync: Int = 100
-  limitItensPage: Int = 50
 }
 
 type Ticket {
@@ -85,4 +85,16 @@ type Ticket {
 
 input TicketInput {
   id: ObjectId!
+}
+
+type TicketPaginateResult {
+  docs: [Ticket!]!
+  totalDocs: Int!
+  limit: Int!
+  offset: Int!
+}
+
+input TicketWithoutMatch {
+  limit: Int = 20
+  offset: Int = 0
 }

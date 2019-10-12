@@ -7,12 +7,14 @@ import {
   AddTicketInput, 
   ListTicketsInput, 
   TicketInput,
+  TicketWithoutMatch,
+  TicketPaginateResult,
   SyncTicketsInput
 } from "./Ticket.input"
 
 @Resolver(() => Ticket)
 export class TicketResolver {
-  
+
   @Query(() => Ticket, { nullable: true })
   public async ticket(@Arg("input") ticketInput: TicketInput): Promise<Ticket> {
     const ticket = await TicketModel.findById(ticketInput.id).populate('movie')
@@ -30,6 +32,12 @@ export class TicketResolver {
       .sort((a, b) => b.date.getTime() - a.date.getTime())
       .slice(0, input.limit)
     return result
+  }
+
+  @Query(() => TicketPaginateResult)
+  public async ticketsWithoutMatch(@Arg("input") input: TicketWithoutMatch): Promise<TicketPaginateResult> {
+    const { limit, offset } = input
+    return await TicketModel.paginate({ movie: null}, { limit, offset })
   }
 
   @Mutation(() => Ticket)
