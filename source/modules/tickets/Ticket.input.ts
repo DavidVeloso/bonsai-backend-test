@@ -41,9 +41,9 @@ export class ListTicketsInput {
 
 @InputType()
 export class SyncTicketsInput {
-  @Field(() => Int, { defaultValue: 100 })
+  @Field(() => Int, { defaultValue: 50 })
   @Max(1000)
-  public maxTicketsToSync: number
+  public limitPageSync: number
 }
 
 @InputType()
@@ -70,15 +70,13 @@ export class AddTicketInput implements Partial<Ticket> {
   @Field(() => Int)
   public inventory: number
 
-  @Field()
-  public imageUrl?: string
+  @Field(() => String)
+  public imageUrl: string
 
   @Field()
   public date: Date
 
-  @Field()
-  public originId?: ObjectId
-
-  @Field()
-  public movie?: ObjectId
+  // original ticket id
+  @Field(() => String)
+  public originId: string
 }

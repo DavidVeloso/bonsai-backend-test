@@ -10,8 +10,7 @@ input AddTicketInput {
   inventory: Int!
   imageUrl: String!
   date: DateTime!
-  originId: ObjectId!
-  movie: ObjectId!
+  originId: String!
 }
 
 """
@@ -88,7 +87,7 @@ type Rating {
 }
 
 input SyncTicketsInput {
-  maxTicketsToSync: Int = 100
+  limitPageSync: Int = 50
 }
 
 type Ticket {
@@ -100,7 +99,9 @@ type Ticket {
   imageUrl: String!
   date: DateTime!
   movie: Movie
-  originId: ObjectId!
+  originId: String
+  syncMovieTries: Int!
+  syncMovieLastError: String!
 }
 
 input TicketInput {

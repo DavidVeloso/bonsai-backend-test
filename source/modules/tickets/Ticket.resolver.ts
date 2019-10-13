@@ -1,6 +1,6 @@
-import { Arg, Mutation, Query, Resolver, Info } from "type-graphql"
+import { Arg, Mutation, Query, Resolver } from "type-graphql"
 import TicketModel, { Ticket } from "../../entities/ticket"
-import syncTicketsService from '../../services/syncTickets'
+import syncTicketsService from '../../services/ticket.service'
 
 import { 
   AddTicketInput, 
@@ -47,7 +47,13 @@ export class TicketResolver {
   
   @Mutation(() => String)
   public async syncTickets(@Arg("input") syncInput: SyncTicketsInput): Promise<String> {
-    syncTicketsService(syncInput)
-    return 'Tickets sync started! You can query while we store the data.'
+    try {
+      await TicketModel.deleteMany({})
+      syncTicketsService(syncInput)
+      return 'Tickets sync started! You can query while we store the data.'
+    } catch (error) {
+      console.log('-> Error  syncTickets: ', error)
+      throw error
+    }
   }
 }

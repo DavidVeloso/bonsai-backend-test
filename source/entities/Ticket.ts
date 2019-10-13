@@ -37,7 +37,8 @@ export class Ticket extends Typegoose {
   @Property({ required: true })
   public inventory: number
 
-  @Field()
+  @Field(() => String)
+  @Property({ required: false })
   public imageUrl: string
 
   @Field()
@@ -48,8 +49,17 @@ export class Ticket extends Typegoose {
   @Property({ ref: Movie })
   public movie: Ref<Movie>
 
-  @Field()
-  public originId: ObjectId
+  @Field(() => String, {nullable: true})
+  @Property({ required: false })
+  public originId: string
+
+  @Field(() => Int)
+  @Property({default: 0})
+  public syncMovieTries: number
+
+  @Field(() => String)
+  @Property({required: false})
+  public syncMovieLastError: string
 
   @InstanceMethod
   public saveFields(this: InstanceType<Ticket>) {
