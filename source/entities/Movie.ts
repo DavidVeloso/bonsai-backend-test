@@ -1,10 +1,13 @@
 import { ObjectId } from "mongodb"
 import { Field, ObjectType } from "type-graphql"
+import paginate from 'mongoose-paginate-v2'
+
+import { PaginateResult } from '../types'
+
 import {
   arrayProp as ArrayProperty,
-  ModelType,
   prop as Property,
-  staticMethod as StaticMethod,
+  plugin,
   Typegoose,
 } from "typegoose"
 
@@ -17,6 +20,7 @@ class Rating {
   Source: string
 }
 
+@plugin(paginate)
 @ObjectType()
 export class Movie extends Typegoose {
   
@@ -102,6 +106,9 @@ export class Movie extends Typegoose {
   @Field()
   @Property()
   public Production: string
+
+  // Implement pagitate method
+  static paginate: (query: any, options: any) => Promise<PaginateResult<Movie>>
 }
 
 export const MovieModel = new Movie().getModelForClass(Movie)

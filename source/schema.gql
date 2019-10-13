@@ -48,6 +48,22 @@ type Movie {
   Production: String!
 }
 
+input MovieInput {
+  id: ObjectId!
+}
+
+input MovieList {
+  limit: Int = 20
+  offset: Int = 0
+}
+
+type MoviePaginateResult {
+  docs: [Movie!]!
+  totalDocs: Int!
+  limit: Int!
+  offset: Int!
+}
+
 type Mutation {
   addTicket(input: AddTicketInput!): Ticket!
   syncTickets(input: SyncTicketsInput!): String!
@@ -60,6 +76,8 @@ type Query {
   ticket(input: TicketInput!): Ticket
   listTickets(input: ListTicketsInput!): [Ticket!]!
   ticketsWithoutMatch(input: TicketWithoutMatch!): TicketPaginateResult!
+  movie(input: MovieInput!): Movie
+  listMovies(input: MovieList!): MoviePaginateResult!
 }
 
 type Rating {
