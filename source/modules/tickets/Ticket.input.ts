@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb"
 import { Field, Float, InputType, Int, ObjectType } from "type-graphql"
-import { Max } from "class-validator"
+import { Max, IsIn } from "class-validator"
 import { Ticket } from '../../entities/ticket'
 
 @ObjectType()
@@ -23,11 +23,20 @@ export class TicketInput {
 
 @InputType()
 export class ListTicketsInput {
-  @Field(() => Date)
-  public cursor: Date
+  @Field(() => Date, {nullable: true})
+  public cursorDate?: Date
+  
+  // # used to sort cursor (-1 Desc 1 ASC)
+  @Field(() => Int, {defaultValue: -1})
+  @IsIn([-1, 1])
+  public sortDate?: number
 
-  @Field(() => Int)
-  public limit: number
+  @Field(() => Int, { defaultValue: 20 })
+  @Max(100)
+  public limit?: number
+
+  @Field(() => Int, { defaultValue: 0 })
+  public offset?: number
 }
 
 @InputType()
@@ -38,7 +47,7 @@ export class SyncTicketsInput {
 }
 
 @InputType()
-export class TicketWithoutMatch {
+export class TicketWithoutMovie {
   @Field(() => Int, { defaultValue: 20 })
   @Max(100)
   public limit: number
@@ -68,7 +77,7 @@ export class AddTicketInput implements Partial<Ticket> {
   public date: Date
 
   @Field()
-  public originId: ObjectId
+  public originId?: ObjectId
 
   @Field()
   public movie?: ObjectId

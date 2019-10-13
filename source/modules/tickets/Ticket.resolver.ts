@@ -1,5 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql"
-
+import { Arg, Mutation, Query, Resolver, Info } from "type-graphql"
 import TicketModel, { Ticket } from "../../entities/ticket"
 import syncTicketsService from '../../services/syncTickets'
 
@@ -7,7 +6,7 @@ import {
   AddTicketInput, 
   ListTicketsInput, 
   TicketInput,
-  TicketWithoutMatch,
+  TicketWithoutMovie,
   TicketPaginateResult,
   SyncTicketsInput
 } from "./Ticket.input"
@@ -24,20 +23,20 @@ export class TicketResolver {
     return ticket
   }
 
-  @Query(() => [Ticket])
-  public async listTickets(@Arg("input") input: ListTicketsInput): Promise<Ticket[]> {
-    const tickets = await TicketModel.find({})
-    const result = tickets
-      .filter(ticket => ticket.date.getTime() < input.cursor.getTime())
-      .sort((a, b) => b.date.getTime() - a.date.getTime())
-      .slice(0, input.limit)
-    return result
+  @Query(() => TicketPaginateResult)
+  public async listTickets(@Arg("input") input: ListTicketsInput): Promise<TicketPaginateResult> {
+    const { limit, offset, cursorDate, sortDate} = input
+    const query = cursorDate ? { date: { $lt: new Date(cursorDate) }} : {}
+    const options = { limit, offset, populate: 'movie', sort: { date: sortDate}}
+    return await TicketModel.paginate(query, options)
   }
 
   @Query(() => TicketPaginateResult)
-  public async ticketsWithoutMatch(@Arg("input") input: TicketWithoutMatch): Promise<TicketPaginateResult> {
+  public async ticketsWithoutMovie(@Arg("input") input: TicketWithoutMovie): Promise<TicketPaginateResult> {
     const { limit, offset } = input
-    return await TicketModel.paginate({ movie: null}, { limit, offset })
+    const query = { movie: null}
+    const options = { limit, offset }
+    return await TicketModel.paginate(query, options)
   }
 
   @Mutation(() => Ticket)
@@ -49,6 +48,6 @@ export class TicketResolver {
   @Mutation(() => String)
   public async syncTickets(@Arg("input") syncInput: SyncTicketsInput): Promise<String> {
     syncTicketsService(syncInput)
-    return 'Tickets sync started!'
+    return 'Tickets sync started! You can query while we store the data.'
   }
 }

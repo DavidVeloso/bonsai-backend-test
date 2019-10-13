@@ -11,7 +11,6 @@ import {
   InstanceType,
   prop as Property,
   plugin,
-  staticMethod as StaticMethod,
   Typegoose
 } from "typegoose"
 
@@ -50,7 +49,6 @@ export class Ticket extends Typegoose {
   public movie: Ref<Movie>
 
   @Field()
-  @Property({ required: true })
   public originId: ObjectId
 
   @InstanceMethod

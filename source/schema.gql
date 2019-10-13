@@ -20,8 +20,10 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 input ListTicketsInput {
-  cursor: DateTime!
-  limit: Int!
+  cursorDate: DateTime
+  sortDate: Int = -1
+  limit: Int = 20
+  offset: Int = 0
 }
 
 type Movie {
@@ -74,8 +76,8 @@ scalar ObjectId
 
 type Query {
   ticket(input: TicketInput!): Ticket
-  listTickets(input: ListTicketsInput!): [Ticket!]!
-  ticketsWithoutMatch(input: TicketWithoutMatch!): TicketPaginateResult!
+  listTickets(input: ListTicketsInput!): TicketPaginateResult!
+  ticketsWithoutMovie(input: TicketWithoutMovie!): TicketPaginateResult!
   movie(input: MovieInput!): Movie
   listMovies(input: MovieList!): MoviePaginateResult!
 }
@@ -112,7 +114,7 @@ type TicketPaginateResult {
   offset: Int!
 }
 
-input TicketWithoutMatch {
+input TicketWithoutMovie {
   limit: Int = 20
   offset: Int = 0
 }
