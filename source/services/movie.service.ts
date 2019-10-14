@@ -1,20 +1,19 @@
 import axios from "axios"
-import MovieModel, { Movie } from "../entities/movie"
+import MovieModel from "../entities/movie"
 import TicketModel, { Ticket } from "../entities/ticket"
+import { logger } from "../config/logger"
 
 // TO-DICUSS: we can call this function in one cronjob to scheduled syncs
-const syncTicketMovieInfo = async (limit:number = 100, skip:number = 0): Promise<void> => {
-  console.log('Sync movies started.')
-
+const syncTicketMovieInfo = async (limit:number = 100, skip:number = 0): Promise<void[]> => {
+  
   // Retrieve tickets without movie info and with a specific number off sync attempts
   const ticketsWithoutMovie = await TicketModel.find({ 
     movie: null,
     syncMovieTries: { "$lte": 3 }
   }).sort({ syncMovieTries: 1 }).skip(skip).limit(limit)
-
-  // Parallel for performance
-  Promise.all(ticketsWithoutMovie.map(async (ticket) => {
   
+  // Parallel for performance
+  return Promise.all(ticketsWithoutMovie.map(async (ticket) => {
     const movieInfo = await imdbMovieInfo(ticket)
     let movieId
 
@@ -30,41 +29,44 @@ const syncTicketMovieInfo = async (limit:number = 100, skip:number = 0): Promise
     } else {
       ticket.syncMovieLastError = movieInfo.Error // keep error message to measure what is happened
     }
-
+  
     ticket.syncMovieTries++
     ticket.movie = movieId
     await ticket.save()
   }))
 }
 
+// Fetch movie info from IMDB API
 const imdbMovieInfo = async (ticket:Ticket) => {
   try {
-    // TO-DICUSS
-    // - Save on db params used before to chech and avoid the same error
-    // - Improve syncMovieTries to use diferent functions based on numbers
-    const { title } = ticket
-    const { OMDB_API_URL, OMDB_API_KEY } = process.env
-    
-    let searchParams: any = { apikey: OMDB_API_KEY }
-
-    // Check and use the number of sync attempts 
-    // to use different search formats.
-    if(ticket.syncMovieTries === 0){
-      searchParams.t = cleanMovieName(title)
-    } else if(ticket.syncMovieTries === 1) {
-      searchParams.t = title
-    } else {
-      const ticketYear = new Date(ticket.date).getFullYear()
-      searchParams.t = cleanMovieName(title)
-      searchParams.y = ticketYear
-    }
-
+    const { OMDB_API_URL } = process.env
+    const searchParams = resolveSearchParams(ticket) 
     const {data: movieInfo} = await axios.get(<string>OMDB_API_URL, { params: searchParams})
     return movieInfo
   } catch (error) {
-    console.log('--> Erro IMDB Search: ', error.respose.data)
+    logger.error('Erro IMDB Search: ', error.response.data || error.message)
   }
 }
+
+const resolveSearchParams = (ticket:Ticket) => {
+  // TO-DICUSS:
+  // - Save past params on db to check and avoid the same error
+  // - Use 'syncMovieTries' and 'syncMovieLastError' to use different approaches
+  // - Search by Year don't work, tickets date are so different...
+  const { title, syncMovieTries} = ticket
+  const { OMDB_API_KEY } = process.env
+  const searchParams: any = { apikey: OMDB_API_KEY }
+
+  // Check and use the number of sync attempts to try different search params.
+  if(syncMovieTries === 1){
+    searchParams.t = title
+  } else{
+    searchParams.t = cleanMovieName(title)
+  }
+
+  return searchParams
+}
+
 
 // Clean movie title basead on manual attempts
 // TO-DICUSS: Study different approaches to clean and use title combinations
@@ -72,16 +74,18 @@ const imdbMovieInfo = async (ticket:Ticket) => {
 //   - Use only name in Brackets
 //   - If has ', the' ou ', a' try use expression on string start
 const cleanMovieName = (movieName:string): string => {
-  const lowerCaseAndTrim = movieName.toLowerCase().trim() // Lower case and remover blank spaces
-  const removeBrackets = lowerCaseAndTrim.replace(/\(.*\)/, '') // Remove Brackets (ex: 'Heirloom, The (Zhai Ban)' -> 'Heirloom, The')
+  const lowerCase = movieName.toLowerCase() // Lower case
+  const removeBrackets = lowerCase.replace(/\(.*\)/, '') // Remove Brackets (ex: 'Heirloom, The (Zhai Ban)' -> 'Heirloom, The')
   const noTheExpression = removeBrackets.replace(', the', '') // Remove ',t he' (ex: 'Heirloom, The' -> 'Heirloom')
   const noAExpression = noTheExpression.replace(', a', '') // Remove ', a' (ex: 'Heirloom, a' -> 'Heirloom')
-  const encodedName = encodeURIComponent(noAExpression) // Encode string to escape caracters
+  const trim = noAExpression.trim() // Remove blank spaces
+  const encodedName = encodeURI(trim) // Encode string to escape caracters
   return encodedName
 }
 
 export {
   syncTicketMovieInfo,
   imdbMovieInfo,
+  resolveSearchParams,
   cleanMovieName
 }

@@ -1,6 +1,7 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql"
 import TicketModel, { Ticket } from "../../entities/ticket"
 import syncTicketsService from '../../services/ticket.service'
+import { logger } from "../../config/logger"
 
 import { 
   AddTicketInput, 
@@ -17,9 +18,7 @@ export class TicketResolver {
   @Query(() => Ticket, { nullable: true })
   public async ticket(@Arg("input") ticketInput: TicketInput): Promise<Ticket> {
     const ticket = await TicketModel.findById(ticketInput.id).populate('movie')
-    if (!ticket) {
-      throw new Error("No ticket found!")
-    }
+    if (!ticket) throw new Error("No ticket found!")
     return ticket
   }
 
@@ -52,7 +51,7 @@ export class TicketResolver {
       syncTicketsService(syncInput)
       return 'Tickets sync started! You can query while we store the data.'
     } catch (error) {
-      console.log('-> Error  syncTickets: ', error)
+      logger.error('Error syncTickets: ', error)
       throw error
     }
   }

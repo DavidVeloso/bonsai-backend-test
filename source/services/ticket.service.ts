@@ -4,13 +4,14 @@ import { SyncTicketsInput, AddTicketInput } from "../modules/tickets/Ticket.inpu
 import TicketModel, { Ticket } from "../entities/ticket"
 import transformGenres from '../helpers/transformGenres'
 import { syncTicketMovieInfo } from './movie.service'
+import { logger } from "../config/logger"
 
 const syncTicketsService = async (syncInput: SyncTicketsInput) => {
   try {
     const { limitPageSync } = syncInput
     storeTickets(limitPageSync, 0)
   } catch (error) {
-    console.log('--> Error SyncTicketsService: ', error)
+    logger.error('Error SyncTicketsService: ', error)
   }
 }
 
@@ -20,7 +21,7 @@ const getTickets = (limitPageSync:number, skip = 0) => {
     const ticketsUri = `${BONSAI_MOVIES_TICKETS_URL}?skip=${skip}&limit=${limitPageSync}`
     return axios.get(ticketsUri)
   } catch (error) {
-    console.log('Error on get tickets from api: ', error)
+    logger.error('Error on get tickets from api: ', error)
     throw error
   }
 }
