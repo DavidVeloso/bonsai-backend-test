@@ -3,7 +3,7 @@ import MovieModel from "../entities/movie"
 import TicketModel, { Ticket } from "../entities/ticket"
 import { logger } from "../config/logger"
 
-// TO-DICUSS: we can call this function in one cronjob to scheduled syncs
+// TO-DISCUSS: we can call this function in one cronjob to scheduled Ssyncs
 const syncTicketMovieInfo = async (limit:number = 100, skip:number = 0): Promise<void[]> => {
   
   // Retrieve tickets without movie info and with a specific number off sync attempts
@@ -49,10 +49,10 @@ const imdbMovieInfo = async (ticket:Ticket) => {
 }
 
 const resolveSearchParams = (ticket:Ticket) => {
-  // TO-DICUSS:
+  // TO-DISCUSS:
   // - Save past params on db to check and avoid the same error
   // - Use 'syncMovieTries' and 'syncMovieLastError' to use different approaches
-  // - Search by Year don't work, tickets date are so different...
+  // - Search by Year does not work, tickets date are so different...
   const { title, syncMovieTries} = ticket
   const { OMDB_API_KEY } = process.env
   const searchParams: any = { apikey: OMDB_API_KEY }
@@ -67,12 +67,11 @@ const resolveSearchParams = (ticket:Ticket) => {
   return searchParams
 }
 
-
-// Clean movie title basead on manual attempts
-// TO-DICUSS: Study different approaches to clean and use title combinations
+// Clean movie title based on manual attempts
+// TO-DISCUSS: Study different approaches to clean and use title combinaStions
 // Possible approaches:
 //   - Use only name in Brackets
-//   - If has ', the' ou ', a' try use expression on string start
+//   - If input has ', the' or ', a' try use expression on string start
 const cleanMovieName = (movieName:string): string => {
   const lowerCase = movieName.toLowerCase() // Lower case
   const removeBrackets = lowerCase.replace(/\(.*\)/, '') // Remove Brackets (ex: 'Heirloom, The (Zhai Ban)' -> 'Heirloom, The')
