@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "jest .",
+    "test": "NODE_ENV=test jest .",
     "lint": "tslint --project '.'",
     "prettify": "prettier --config ./.prettierrc.json --write './source/**/*.ts'",
     "sane": "yarn lint && yarn prettify && yarn test",
