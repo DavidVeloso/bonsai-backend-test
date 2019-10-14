@@ -3,16 +3,20 @@ import * as dotenv from "dotenv"
 import MovieModel from "../../source/entities/Movie"
 import TicketModel from "../../source/entities/Ticket"
 import { logger } from "../../source/config/logger"
+import path from 'path'
 
-dotenv.config()
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
+const envPath = path.resolve(`${__dirname}/../../${envFile}`)
+
+dotenv.config({ path: envPath })
 
 let dbConnection: Connection | null
 
 export const connectTestDb = async (): Promise<void> => {
   try {
-    const { DATABASE_TEST_URI } = process.env
+    const { DATABASE_URI } = process.env
     if (!dbConnection) {
-      const { connection } = await connect(<string>DATABASE_TEST_URI, { useNewUrlParser: true, useCreateIndex: true })
+      const { connection } = await connect(<string>DATABASE_URI, { useNewUrlParser: true, useCreateIndex: true })
       dbConnection = connection;
     }
   } catch (mongoConnectError) {

@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb"
 import { Field, Float, Int, ObjectType } from "type-graphql"
 import paginate from 'mongoose-paginate-v2'
 
-import { Movie } from "./movie"
+import { Movie } from "./Movie"
 import { Ref, PaginateResult} from '../types'
 
 import {

@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb"
 import { Field, InputType, Int, ObjectType } from "type-graphql"
 import { Max } from "class-validator"
-import { Movie } from '../../entities/movie'
+import { Movie } from '../../entities/Movie'
 
 @InputType()
 export class MovieInput {

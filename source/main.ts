@@ -11,7 +11,10 @@ import resolvers from "./modules"
 import typegooseMiddleware from "./middlewares/typegoose.middleware"
 import { logger } from "./config/logger"
 
-dotenv.config()
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
+const envPath = path.resolve(`${__dirname}/../${envFile}`)
+
+dotenv.config({ path: envPath })
 
 const {SERVER_PORT, DATABASE_URI} = process.env
 
