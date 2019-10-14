@@ -1,7 +1,7 @@
 import axios from "axios"
 
 import { SyncTicketsInput, AddTicketInput } from "../modules/tickets/Ticket.input"
-import TicketModel, { Ticket } from "../entities/ticket"
+import TicketModel, { Ticket } from "../entities/Ticket"
 import transformGenres from '../helpers/transformGenres'
 import { syncTicketMovieInfo } from './movie.service'
 import { logger } from "../config/logger"

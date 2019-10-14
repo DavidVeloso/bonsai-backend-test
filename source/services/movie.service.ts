@@ -1,6 +1,6 @@
 import axios from "axios"
-import MovieModel from "../entities/movie"
-import TicketModel, { Ticket } from "../entities/ticket"
+import MovieModel from "../entities/Movie"
+import TicketModel, { Ticket } from "../entities/Ticket"
 import { logger } from "../config/logger"
 
 // TO-DISCUSS: we can call this function in one cronjob to scheduled Ssyncs

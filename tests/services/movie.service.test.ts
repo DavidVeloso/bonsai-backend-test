@@ -2,7 +2,7 @@ import axios from "axios"
 import { validTickets, ticketWithoutMatchMovie} from "../_utils/data/ticket"
 import { connectTestDb, clearDb, closeDb } from "../_utils/database"
 import TicketModel, {Ticket} from "../../source/entities/Ticket"
-import MovieModel from "../../source/entities/movie"
+import MovieModel from "../../source/entities/Movie"
 import { 
   cleanMovieName, 
   imdbMovieInfo, 

@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb"
 import { Field, Float, InputType, Int, ObjectType } from "type-graphql"
 import { Max, IsIn } from "class-validator"
-import { Ticket } from '../../entities/ticket'
+import { Ticket } from "../../entities/Ticket"
 
 @ObjectType()
 export class TicketPaginateResult {

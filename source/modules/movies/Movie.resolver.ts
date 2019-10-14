@@ -1,5 +1,5 @@
 import { Arg, Query, Resolver } from "type-graphql"
-import MovieModel, { Movie } from "../../entities/movie"
+import MovieModel, { Movie } from "../../entities/Movie"
 
 import { 
   MovieInput,
