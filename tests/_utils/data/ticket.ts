@@ -1,5 +1,5 @@
 
-export const externalValidTickets = [
+export const bonsaiValidTicketsResponse = [
   {
     _id: { $oid: "5b8701a1fc13ae656900001e"},
     title: "Les Lyonnais",
@@ -19,15 +19,6 @@ export const externalValidTickets = [
     date: "2018-03-29T04:20:01Z"
   },
   {
-    _id: { $oid: "5b8701a1fc13ae6569000024" },
-    title: "The Baby Maker",
-    genre: "Drama",
-    price: 24.618,
-    inventory: 9,
-    image: "http://dummyimage.com/934x515.png/ff4444/ffffff",
-    date: "2018-05-08T14:37:44Z"
-  },
-  {
     _id: { $oid: "5b8701a1fc13ae6569000025" },
     title: "Straight Story, The",
     genre: "Adventure|Drama",
@@ -37,6 +28,37 @@ export const externalValidTickets = [
     date: "2017-10-24T15:03:47Z"
   }
 ]
+
+export const bonsaiInValidTicketsResponse = [
+  {
+    _id: { $oid: "5b8701a1fc13ae656900001e"},
+    title: "",
+    genre: "Drama|Thriller",
+    price: 27.179,
+    inventory: 5,
+    image: "http://dummyimage.com/978x295.png/ff4444/ffffff",
+    date: "2017-12-26T15:26:45Z"
+  },
+  {
+    _id: { $oid: "6f8g01a1fc13ae656900001e"},
+    title: null,
+    genre: "",
+    price: 34,
+    inventory: 4,
+    image: "http://dummyimage.com/978x295.png/ff4444/ffffff",
+    date: "2017-12-28T15:26:45Z"
+  },
+  {
+    _id: { $oid: "6f8g01a1fc13ae656900001e"},
+    title: "The Other",
+    genre: "Drama",
+    price: 14.89,
+    inventory: 12,
+    image: "http://dummyimage.com/978x295.png/ff4444/ffffff",
+    date: null
+  }
+]
+
 
 export const validTickets = [
   {

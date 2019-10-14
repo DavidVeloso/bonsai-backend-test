@@ -30,7 +30,7 @@ const storeTickets = async (limit: number, skip: number): Promise<void> => {
   const {data: tickets} = await getTickets(limit, skip)
   
   // Remove tickets without required information and format ticket
-  const validTickets: AddTicketInput[] = tickets.filter(validateTicketInput).map(formatTicket)
+  const validTickets: AddTicketInput[] = tickets.filter(isValidTicket).map(formatTicket)
   
   // Recursively get and store tickets
   if(validTickets && validTickets.length){
@@ -41,10 +41,10 @@ const storeTickets = async (limit: number, skip: number): Promise<void> => {
 }
 
 // Check ticked required information
-const validateTicketInput = (ticket: Ticket): Boolean => {
+const isValidTicket = (ticket: any): Boolean => {
   const { title, date } = ticket
-  if(!title && title === '') return false
-  if(!date) return false
+  if(!title || title === '') return false
+  if(!date || date === '') return false
   return true
 }
 
@@ -60,4 +60,10 @@ const formatTicket = (ticket: any): AddTicketInput => {
   }
 }
 
-export default syncTicketsService
+export {
+  syncTicketsService,
+  getTickets,
+  storeTickets,
+  isValidTicket,
+  formatTicket
+}
