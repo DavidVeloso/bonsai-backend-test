@@ -5,20 +5,23 @@ import {  getTickets, isValidTicket, formatTicket } from "../../source/services/
 
 describe('Ticket Service', () => {
   const spyAxios = jest.spyOn(axios, 'get')
+  const { BONSAI_MOVIES_TICKETS_URL } = process.env
+
   beforeAll(async () => {
     await connectTestDb()
     await clearDb()
   })
 
   afterAll(async () => {
+    await clearDb()
     await closeDb()
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('getTickets', () => {
-    const { BONSAI_MOVIES_TICKETS_URL } = process.env
-    afterEach(async () => {
-      spyAxios.mockClear()
-    })
     it('Should fetch tickets from api', async () => {
       spyAxios.mockResolvedValueOnce({ data: bonsaiValidTicketsResponse } as AxiosResponse)
       const {data: tickets} = await getTickets(100, 0)

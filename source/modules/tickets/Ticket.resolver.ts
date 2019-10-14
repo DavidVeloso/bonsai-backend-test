@@ -1,6 +1,6 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql"
 import TicketModel, { Ticket } from "../../entities/Ticket"
-import syncTicketsService from '../../services/ticket.service'
+import { syncTicketsService } from '../../services/ticket.service'
 import { logger } from "../../config/logger"
 
 import { 
