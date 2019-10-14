@@ -1,31 +1,17 @@
-// import axios, { AxiosResponse }from "axios"
-import { ObjectId } from 'mongodb'
 import { validTickets, createTicketWithMovie, ticketsWithoutMatchMovie} from "../_utils/data/ticket"
-// import { imdbValidResponse, imdbNotFoundResponse } from "../_utils/data/movie"
 import { connectTestDb, clearDb, closeDb } from "../_utils/database"
 import { graphqlConnection } from "../_utils/graphql"
-import TicketModel, {Ticket} from "../../source/entities/Ticket"
-// import MovieModel from "../../source/entities/Movie"
-
-// import { 
-//   cleanMovieName, 
-//   imdbMovieInfo, 
-//   resolveSearchParams,
-//   syncTicketMovieInfo 
-// } from "../../source/services/movie.service"
+import TicketModel from "../../source/entities/Ticket"
 
 describe('Ticket Resolver', () => {
-  let createdTicketsWithMovies: any
-  let createdTicketsWithotMovie: Ticket[]
-  let createdTickets: Ticket[]
   let ticketWithMovie: any
 
   beforeAll(async () => {
     await connectTestDb()
     await clearDb()
     ticketWithMovie = await createTicketWithMovie()
-    createdTicketsWithotMovie = await TicketModel.insertMany(ticketsWithoutMatchMovie)
-    createdTickets = await TicketModel.insertMany(validTickets)
+    await TicketModel.insertMany(ticketsWithoutMatchMovie)
+    await TicketModel.insertMany(validTickets)
   })
 
   afterAll(async () => {
@@ -67,7 +53,7 @@ describe('Ticket Resolver', () => {
       expect(spyTicketModel).toHaveBeenCalledTimes(1)
     })
 
-    it('Ticket not found id', async () => {
+    it('Ticket not found', async () => {
       const spyTicketModel = jest.spyOn(TicketModel, 'findById')
       const ticketQuery = `
         query ticketQuery($id: ObjectId!){
