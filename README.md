@@ -10,10 +10,10 @@ Install [Docker](https://docs.docker.com/install). This will make it easy to run
 Set up environment variables set in an `.env` file. There is an `.env.example` file provided with all required and optional variables.
 
 ```shell
-// Download images and build conteiners
+// Download images and build containers
 docker-compose build
 
-// Run conteiners
+// Run containers
  docker-compose up -d
 ```
 
@@ -33,7 +33,8 @@ yarn coverage
 
 - Add [Redis](https://redis.io/) to cache tickets e movie data, improving the response time.
 - Add [StatsD](https://github.com/statsd/statsd) to create, aggregate and summarize the api metrics.
-- Add [Sentry.io](https://sentry.io) to centralize and manage the api logs.
+- Add [Sentry.io](https://sentry.io) to track errors and exceptions in production.
+- Add [LogDna](https://logdna.com) for aggregating production logs.
 
 Throughout the code, I added other possible optimizations for discussion.
 
