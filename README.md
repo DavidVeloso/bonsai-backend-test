@@ -1,5 +1,5 @@
-[![CircleCI](https://circleci.com/gh/DavidVeloso/bonsai-backend-test.svg?style=svg)](https://circleci.com/gh/DavidVeloso/bonsai-backend-test)
 ## Bonsai Backend Test
+[![CircleCI](https://circleci.com/gh/DavidVeloso/bonsai-backend-test.svg?style=svg)](https://circleci.com/gh/DavidVeloso/bonsai-backend-test)
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ Set up environment variables set in an `.env` file. There is an `.env.example` f
 // Download images and build conteiners
 docker-compose build
 
-// Run
+// Run conteiners
  docker-compose up -d
 ```
 
@@ -27,12 +27,6 @@ yarn test
 
 // run tests with coverage report
 yarn coverage
-```
-
-## Run all tests with coverage report
-
-```shell
-npm run test:coverage
 ```
 
 ## Todo (possible improvements)
