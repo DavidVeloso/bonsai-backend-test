@@ -1,5 +1,5 @@
-## Bonsai Backend Test
 [![CircleCI](https://circleci.com/gh/DavidVeloso/bonsai-backend-test.svg?style=svg)](https://circleci.com/gh/DavidVeloso/bonsai-backend-test)
+## Bonsai Backend Test
 
 ## Prerequisites
 
