@@ -10,7 +10,7 @@ jobs:
         name: Install dependencies
         command: yarn
       - run:
-        name: Run Lint
+        name: Run lint command
         command: yarn lint
       - run:
         name: Run Test
