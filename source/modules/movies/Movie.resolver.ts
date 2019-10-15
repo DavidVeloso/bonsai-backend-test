@@ -23,5 +23,5 @@ export class MovieResolver {
     const { limit, offset } = input
     return MovieModel.paginate({}, { limit, offset })
   }
-
+  
 }

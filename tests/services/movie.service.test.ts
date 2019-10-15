@@ -1,5 +1,5 @@
 import axios, { AxiosResponse }from "axios"
-import { validTickets, ticketWithoutMatchMovie} from "../_utils/data/ticket"
+import { validTickets, ticketsWithoutMatchMovie} from "../_utils/data/ticket"
 import { imdbValidResponse, imdbNotFoundResponse } from "../_utils/data/movie"
 import { connectTestDb, clearDb, closeDb } from "../_utils/database"
 import TicketModel, {Ticket} from "../../source/entities/Ticket"
@@ -16,18 +16,26 @@ describe('Movie Service', () => {
   let createdTicketsWithotMovie: Ticket[]
   let createdTicketsLen: number
   let createdTicketsWithotMovieLen: number
+  
+  const spyAxios = jest.spyOn(axios, 'get')
+  const { OMDB_API_URL } = process.env
 
   beforeAll(async () => {
     await connectTestDb()
     await clearDb()
     createdTickets = await TicketModel.insertMany(validTickets)
-    createdTicketsWithotMovie = await TicketModel.insertMany(ticketWithoutMatchMovie)
+    createdTicketsWithotMovie = await TicketModel.insertMany(ticketsWithoutMatchMovie)
     createdTicketsLen = createdTickets.length
     createdTicketsWithotMovieLen = createdTicketsWithotMovie.length
   })
 
   afterAll(async () => {
+    await clearDb()
     await closeDb()
+  })
+
+  afterEach(async () => {
+    await jest.clearAllMocks()
   })
   
   describe('cleanMovieName', () => {
@@ -47,13 +55,6 @@ describe('Movie Service', () => {
   })
 
   describe('imdbMovieInfo', () => {
-    const spyAxios = jest.spyOn(axios, 'get')
-    const { OMDB_API_URL } = process.env
-    
-    afterEach(async () => {
-      spyAxios.mockClear()
-    })
-
     it('Should fetch movie info from imdb api', async () => {
       spyAxios.mockResolvedValueOnce({ data: imdbValidResponse } as AxiosResponse)
       const ticket = createdTickets[0]
@@ -78,18 +79,10 @@ describe('Movie Service', () => {
   })
 
   describe('syncTicketMovieInfo', () => {
-    const spyAxios = jest.spyOn(axios, 'get')
     const spyCreateMovie = jest.spyOn(MovieModel, 'create')
     const spyFindTickets = jest.spyOn(TicketModel, 'find')
     const spyFindOneMovie = jest.spyOn(MovieModel, 'findOne')
-
-    afterEach(async () => {
-      spyAxios.mockClear()
-      spyCreateMovie.mockClear()
-      spyFindTickets.mockClear()
-      spyFindOneMovie.mockClear()
-    })
-
+    
     it('Should sync tickets movies', async () => {
       for (const t in createdTickets) {
         spyAxios.mockResolvedValueOnce({ data: imdbValidResponse } as AxiosResponse)

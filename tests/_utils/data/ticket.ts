@@ -1,3 +1,6 @@
+import { imdbValidResponse } from './movie'
+import MovieModel from  '../../../source/entities/Movie'
+import TicketModel from  '../../../source/entities/Ticket'
 
 export const bonsaiValidTicketsResponse = [
   {
@@ -59,7 +62,6 @@ export const bonsaiInValidTicketsResponse = [
   }
 ]
 
-
 export const validTickets = [
   {
     "title": "Wheelmen",
@@ -72,7 +74,7 @@ export const validTickets = [
   },
   {
     "title": "Avengers",
-    "date": new Date("2018-08-30T09:51:31.000Z"),
+    "date": new Date("2017-01-20T09:51:31.000Z"),
     "imageUrl": "http://dummyimage.com/1248x1733.jpg/cc0000/ffffff",
     "originId": "5b8701a2fc13ae6569000176",
     "inventory": 7,
@@ -80,7 +82,7 @@ export const validTickets = [
   },
   {
     "title": "Her",
-    "date": new Date("2018-08-30T08:18:44.000Z"),
+    "date": new Date("2018-06-04T08:18:44.000Z"),
     "imageUrl": "http://dummyimage.com/1763x1520.png/5fa2dd/ffffff",
     "originId": "5b8701a4fc13ae6569000390",
     "inventory": 2,
@@ -88,7 +90,7 @@ export const validTickets = [
   }
 ]
 
-export const ticketWithoutMatchMovie = [
+export const ticketsWithoutMatchMovie = [
   {
     "title": "She No Longer Exists",
     "date": "2017-09-18T11:20:14.000Z",
@@ -108,7 +110,7 @@ export const ticketWithoutMatchMovie = [
   },
   {
     "title": "Têli e Zaga!",
-    "date": "2018-08-19T20:51:15.000Z",
+    "date": "2018-09-20T20:51:15.000Z",
     "imageUrl": "http://dummyimage.com/721x662.bmp/dddddd/000000",
     "originId": "5b8701a1fc13ae6569000075",
     "inventory": 3,
@@ -116,3 +118,18 @@ export const ticketWithoutMatchMovie = [
     "syncMovieTries": 2
   }
 ]
+
+export const createTicketWithMovie = async () => {
+  const movie = await MovieModel.create(imdbValidResponse)
+  const created = await TicketModel.create({
+    "title": "Movie Top",
+    "date": new Date("2018-08-30T21:58:50.000Z"),
+    "imageUrl": "http://dummyimage.com/864x1887.bmp/5fa2dd/ffffff",
+    "originId": "5b8701a2fc13ae656900013d",
+    "inventory": 6,
+    "price": 29.973,
+    "genre": ['Drama'],
+    "movie": movie._id
+  })
+  return created
+}
