@@ -1,16 +1,10 @@
 import { ApolloServer } from "apollo-server"
 import * as dotenv from "dotenv"
-import { ObjectId } from "mongodb"
 import * as path from "path"
 import "reflect-metadata"
 
 import { connectDb } from "./config/database"
 import { logger } from "./config/logger"
-
-import typegooseMiddleware from "./middlewares/typegoose.middleware"
-import resolvers from "./modules"
-import { ObjectIdScalar } from "./objectId.scalar"
-
 import { graphqlSchema } from './graphqlSchema'
 
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
