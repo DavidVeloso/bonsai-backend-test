@@ -1,5 +1,6 @@
-import { connect } from 'mongoose'
-import { logger } from './logger'
+import { connect } from "mongoose"
+
+import { logger } from "./logger"
 
 // Open a new connection to a Mongo database
 export async function connectDb(databaseUrl: string): Promise<void> {

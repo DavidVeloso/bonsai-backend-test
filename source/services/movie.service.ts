@@ -1,7 +1,8 @@
 import axios from "axios"
+
+import { logger } from "../config/logger"
 import MovieModel from "../entities/Movie"
 import TicketModel, { Ticket } from "../entities/Ticket"
-import { logger } from "../config/logger"
 
 // TO-DISCUSS: we can call this function in one cronjob to scheduled Ssyncs
 const syncTicketMovieInfo = async (limit:number = 100, skip:number = 0): Promise<void[]> => {
@@ -9,8 +10,8 @@ const syncTicketMovieInfo = async (limit:number = 100, skip:number = 0): Promise
   // Retrieve tickets without movie info and with a specific number off sync attempts
   const ticketsWithoutMovie = await TicketModel.find({ 
     movie: null,
-    syncMovieTries: { "$lte": 3 }
-  }).sort({ syncMovieTries: 1 }).skip(skip).limit(limit)
+    syncMovieTries: { "$lte": 1 }
+  }).skip(skip).limit(limit)
   
   // Parallel for performance
   return Promise.all(ticketsWithoutMovie.map(async (ticket) => {
@@ -41,7 +42,7 @@ const imdbMovieInfo = async (ticket:Ticket) => {
   try {
     const { OMDB_API_URL } = process.env
     const searchParams = resolveSearchParams(ticket) 
-    const {data: movieInfo} = await axios.get(<string>OMDB_API_URL, { params: searchParams})
+    const {data: movieInfo} = await axios.get(OMDB_API_URL as string, { params: searchParams})
     return movieInfo
   } catch (error) {
     logger.error('Erro IMDB Search: ', error.response.data || error.message)
@@ -52,17 +53,13 @@ const resolveSearchParams = (ticket:Ticket) => {
   // TO-DISCUSS:
   // - Save past params on db to check and avoid the same error
   // - Use 'syncMovieTries' and 'syncMovieLastError' to use different approaches
-  // - Search by Year does not work, tickets date are so different...
+  // - Study and try to search by year..
   const { title, syncMovieTries} = ticket
   const { OMDB_API_KEY } = process.env
   const searchParams: any = { apikey: OMDB_API_KEY }
 
   // Check and use the number of sync attempts to try different search params.
-  if(syncMovieTries === 1){
-    searchParams.t = title
-  } else{
-    searchParams.t = cleanMovieName(title)
-  }
+  searchParams.t = (syncMovieTries === 1) ? title : cleanMovieName(title)
 
   return searchParams
 }

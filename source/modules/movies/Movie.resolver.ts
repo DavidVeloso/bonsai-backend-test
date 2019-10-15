@@ -1,4 +1,5 @@
 import { Arg, Query, Resolver } from "type-graphql"
+
 import MovieModel, { Movie } from "../../entities/Movie"
 
 import { 
@@ -20,7 +21,7 @@ export class MovieResolver {
   @Query(() => MoviePaginateResult)
   public async listMovies(@Arg("input") input: MovieList): Promise<MoviePaginateResult> {
     const { limit, offset } = input
-    return await MovieModel.paginate({}, { limit, offset })
+    return MovieModel.paginate({}, { limit, offset })
   }
   
 }

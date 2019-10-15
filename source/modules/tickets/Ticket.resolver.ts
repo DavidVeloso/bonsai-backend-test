@@ -1,15 +1,17 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql"
+
+import { logger } from "../../config/logger"
+import MovieModel from "../../entities/Movie"
 import TicketModel, { Ticket } from "../../entities/Ticket"
 import { syncTicketsService } from '../../services/ticket.service'
-import { logger } from "../../config/logger"
 
 import { 
   AddTicketInput, 
   ListTicketsInput, 
+  SyncTicketsInput,
   TicketInput,
-  TicketWithoutMovie,
   TicketPaginateResult,
-  SyncTicketsInput
+  TicketWithoutMovie,
 } from "./Ticket.input"
 
 @Resolver(() => Ticket)
@@ -27,7 +29,7 @@ export class TicketResolver {
     const { limit, offset, cursorDate, sortDate} = input
     const query = cursorDate ? { date: { $lt: new Date(cursorDate) }} : {}
     const options = { limit, offset, populate: 'movie', sort: { date: sortDate}}
-    return await TicketModel.paginate(query, options)
+    return TicketModel.paginate(query, options)
   }
 
   @Query(() => TicketPaginateResult)
@@ -35,7 +37,7 @@ export class TicketResolver {
     const { limit, offset } = input
     const query = { movie: null}
     const options = { limit, offset }
-    return await TicketModel.paginate(query, options)
+    return TicketModel.paginate(query, options)
   }
 
   @Mutation(() => Ticket)
@@ -45,9 +47,10 @@ export class TicketResolver {
   }
   
   @Mutation(() => String)
-  public async syncTickets(@Arg("input") syncInput: SyncTicketsInput): Promise<String> {
+  public async syncTickets(@Arg("input") syncInput: SyncTicketsInput): Promise<string> {
     try {
       await TicketModel.deleteMany({})
+      await MovieModel.deleteMany({})
       syncTicketsService(syncInput)
       return 'Tickets sync started! You can query while we store the data.'
     } catch (error) {

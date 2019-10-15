@@ -1,10 +1,11 @@
 import axios from "axios"
 
-import { SyncTicketsInput, AddTicketInput } from "../modules/tickets/Ticket.input"
-import TicketModel, { Ticket } from "../entities/Ticket"
-import transformGenres from '../helpers/transformGenres'
-import { syncTicketMovieInfo } from './movie.service'
 import { logger } from "../config/logger"
+import TicketModel from "../entities/Ticket"
+import transformGenres from '../helpers/transformGenres'
+import { AddTicketInput, SyncTicketsInput } from "../modules/tickets/Ticket.input"
+
+import { syncTicketMovieInfo } from './movie.service'
 
 const syncTicketsService = async (syncInput: SyncTicketsInput) => {
   try {
@@ -41,7 +42,7 @@ const storeTickets = async (limit: number, skip: number): Promise<void> => {
 }
 
 // Check ticked required information
-const isValidTicket = (ticket: any): Boolean => {
+const isValidTicket = (ticket: any): boolean => {
   const { title, date } = ticket
   if(!title || title === '') return false
   if(!date || date === '') return false
@@ -51,11 +52,12 @@ const isValidTicket = (ticket: any): Boolean => {
 // Normalize ticket data
 const formatTicket = (ticket: any): AddTicketInput => {
   const { _id, title, genre, image, price, date, inventory } = ticket
+  const { $oid: originId } = _id
   return { 
     imageUrl: image || '', 
-    originId: _id['$oid'], // keep original ticket id for possible use in future
     genre: transformGenres(genre, '|'),
     inventory: Math.max(inventory || 0, 0),
+    originId, // keep original ticket id for possible use in future
     title, price, date
   }
 }
