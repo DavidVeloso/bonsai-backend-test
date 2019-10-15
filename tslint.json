@@ -34,9 +34,10 @@
       "ban-keywords",
       "check-format"
     ],
-    "no-implicit-dependencies": [true, "dev"],
+    "no-implicit-dependencies": false,
     "array-type": false,
-    "max-classes-per-file": [true, 10]
+    "max-classes-per-file": [true, 10],
+    "interface-name": false
   },
   "extends": ["tslint:latest", "tslint-config-prettier"]
 }

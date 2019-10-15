@@ -1,22 +1,25 @@
 import { ObjectId } from "mongodb"
-import { Field, Float, Int, ObjectType } from "type-graphql"
 import paginate from 'mongoose-paginate-v2'
-
-import { Movie } from "./Movie"
-import { Ref, PaginateResult} from '../types'
-
+import { Field, Float, Int, ObjectType } from "type-graphql"
 import {
   arrayProp as ArrayProperty,
   instanceMethod as InstanceMethod,
   InstanceType,
-  prop as Property,
   plugin,
+  prop as Property,
   Typegoose
 } from "typegoose"
+
+import { PaginateResult, Ref } from '../types'
+
+import { Movie } from "./Movie"
 
 @plugin(paginate)
 @ObjectType()
 export class Ticket extends Typegoose {
+  
+  // Implement pagitate method
+  public static paginate: (query: any, options: any) => Promise<PaginateResult<Ticket>>
 
   @Field()
   public readonly _id: ObjectId
@@ -68,8 +71,6 @@ export class Ticket extends Typegoose {
     return this.save()
   }
   
-  // Implement pagitate method
-  static paginate: (query: any, options: any) => Promise<PaginateResult<Ticket>>
 }
 
 export const TicketModel = new Ticket().getModelForClass(Ticket)

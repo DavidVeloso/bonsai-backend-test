@@ -74,11 +74,11 @@ type Mutation {
 scalar ObjectId
 
 type Query {
+  movie(input: MovieInput!): Movie
+  listMovies(input: MovieList!): MoviePaginateResult!
   ticket(input: TicketInput!): Ticket
   listTickets(input: ListTicketsInput!): TicketPaginateResult!
   ticketsWithoutMovie(input: TicketWithoutMovie!): TicketPaginateResult!
-  movie(input: MovieInput!): Movie
-  listMovies(input: MovieList!): MoviePaginateResult!
 }
 
 type Rating {
